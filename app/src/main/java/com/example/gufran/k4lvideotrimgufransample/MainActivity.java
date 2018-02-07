@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startTrimActivity(@NonNull Uri uri) {
-        Intent intent = new Intent(this, TrimmerActivity.class);
+        Intent intent = new Intent(this, VideoTrimmerActivity.class);
         intent.putExtra(EXTRA_VIDEO_PATH, FileUtils.getPath(this, uri));
         startActivity(intent);
     }

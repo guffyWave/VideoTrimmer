@@ -68,7 +68,7 @@ public class K4LVideoTrimmer extends FrameLayout {
     private static final int MIN_TIME_FRAME = 1000;
     private static final int SHOW_PROGRESS = 2;
 
-    private ThumbSeekBar mHolderTopView;
+    //private ThumbSeekBar mHolderTopView;
     private RangeSeekBarView mRangeSeekBarView;
     private RelativeLayout mLinearVideo;
     private View mTimeInfoContainer;
@@ -79,7 +79,7 @@ public class K4LVideoTrimmer extends FrameLayout {
     private TextView mTextTime;
     private TimeLineView mTimeLineView;
 
-    private ProgressBarView mVideoProgressIndicator;
+    private ProgressBarView mVideoProgressIndicatorTop, mVideoProgressIndicatorBottom;
     private Uri mSrc;
     private String mFinalPath;
 
@@ -110,8 +110,9 @@ public class K4LVideoTrimmer extends FrameLayout {
     private void init(Context context) {
         LayoutInflater.from(context).inflate(R.layout.view_time_line, this, true);
 
-        mHolderTopView = ((ThumbSeekBar) findViewById(R.id.handlerTop));
-        mVideoProgressIndicator = ((ProgressBarView) findViewById(R.id.timeVideoView));
+        //  mHolderTopView = ((ThumbSeekBar) findViewById(R.id.handlerTop));
+        mVideoProgressIndicatorTop = ((ProgressBarView) findViewById(R.id.timeVideoViewTop));
+        mVideoProgressIndicatorBottom = ((ProgressBarView) findViewById(R.id.timeVideoViewBottom));
         mRangeSeekBarView = ((RangeSeekBarView) findViewById(R.id.timeLineBar));
         mLinearVideo = ((RelativeLayout) findViewById(R.id.layout_surface_view));
         mVideoView = ((VideoView) findViewById(R.id.video_loader));
@@ -135,27 +136,29 @@ public class K4LVideoTrimmer extends FrameLayout {
                 updateVideoProgress(time);
             }
         });
-        mListeners.add(mVideoProgressIndicator);
+        mListeners.add(mVideoProgressIndicatorTop);
+        mListeners.add(mVideoProgressIndicatorBottom);
 
-        findViewById(R.id.btCancel)
-                .setOnClickListener(
-                        new OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                onCancelClicked();
-                            }
-                        }
-                );
 
-        findViewById(R.id.btSave)
-                .setOnClickListener(
-                        new OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                onSaveClicked();
-                            }
-                        }
-                );
+//        findViewById(R.id.btCancel)
+//                .setOnClickListener(
+//                        new OnClickListener() {
+//                            @Override
+//                            public void onClick(View view) {
+//                                onCancelClicked();
+//                            }
+//                        }
+//                );
+//
+//        findViewById(R.id.btSave)
+//                .setOnClickListener(
+//                        new OnClickListener() {
+//                            @Override
+//                            public void onClick(View view) {
+//                                onSaveClicked();
+//                            }
+//                        }
+//                );
 
         final GestureDetector gestureDetector = new
                 GestureDetector(getContext(),
@@ -206,24 +209,26 @@ public class K4LVideoTrimmer extends FrameLayout {
                 onStopSeekThumbs();
             }
         });
-        mRangeSeekBarView.addOnRangeSeekBarListener(mVideoProgressIndicator);
+        mRangeSeekBarView.addOnRangeSeekBarListener(mVideoProgressIndicatorTop);
+        mRangeSeekBarView.addOnRangeSeekBarListener(mVideoProgressIndicatorBottom);
 
-        mHolderTopView.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                onPlayerIndicatorSeekChanged(progress, fromUser);
-            }
 
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-                onPlayerIndicatorSeekStart();
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                onPlayerIndicatorSeekStop(seekBar);
-            }
-        });
+//        mHolderTopView.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+//            @Override
+//            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+//                onPlayerIndicatorSeekChanged(progress, fromUser);
+//            }
+//
+//            @Override
+//            public void onStartTrackingTouch(SeekBar seekBar) {
+//                onPlayerIndicatorSeekStart();
+//            }
+//
+//            @Override
+//            public void onStopTrackingTouch(SeekBar seekBar) {
+//                onPlayerIndicatorSeekStop(seekBar);
+//            }
+//        });
 
         mVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
@@ -242,19 +247,24 @@ public class K4LVideoTrimmer extends FrameLayout {
 
     private void setUpMargins() {
         int marge = mRangeSeekBarView.getThumbs().get(0).getWidthBitmap();
-        int widthSeek = mHolderTopView.getThumb().getMinimumWidth() / 2;
+        // int widthSeek = mHolderTopView.getThumb().getMinimumWidth() / 2;
 
-        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) mHolderTopView.getLayoutParams();
-        lp.setMargins(marge - widthSeek, 0, marge - widthSeek, 0);
-        mHolderTopView.setLayoutParams(lp);
+        // RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) mHolderTopView.getLayoutParams();
+        // lp.setMargins(marge - widthSeek, 0, marge - widthSeek, 0);
+        // mHolderTopView.setLayoutParams(lp);
 
+        RelativeLayout.LayoutParams lp;
         lp = (RelativeLayout.LayoutParams) mTimeLineView.getLayoutParams();
         lp.setMargins(marge, 0, marge, 0);
         mTimeLineView.setLayoutParams(lp);
 
-        lp = (RelativeLayout.LayoutParams) mVideoProgressIndicator.getLayoutParams();
+        lp = (RelativeLayout.LayoutParams) mVideoProgressIndicatorTop.getLayoutParams();
         lp.setMargins(marge, 0, marge, 0);
-        mVideoProgressIndicator.setLayoutParams(lp);
+        mVideoProgressIndicatorTop.setLayoutParams(lp);
+
+        lp = (RelativeLayout.LayoutParams) mVideoProgressIndicatorBottom.getLayoutParams();
+        lp.setMargins(marge, 0, marge, 0);
+        mVideoProgressIndicatorBottom.setLayoutParams(lp);
     }
 
     private void onSaveClicked() {
@@ -339,10 +349,10 @@ public class K4LVideoTrimmer extends FrameLayout {
 
         if (fromUser) {
             if (duration < mStartPosition) {
-                setProgressBarPosition(mStartPosition);
+                //setProgressBarPosition(mStartPosition);
                 duration = mStartPosition;
             } else if (duration > mEndPosition) {
-                setProgressBarPosition(mEndPosition);
+                //setProgressBarPosition(mEndPosition);
                 duration = mEndPosition;
             }
             setTimeVideo(duration);
@@ -414,7 +424,7 @@ public class K4LVideoTrimmer extends FrameLayout {
             mEndPosition = mDuration;
         }
 
-        setProgressBarPosition(mStartPosition);
+        // setProgressBarPosition(mStartPosition);
         mVideoView.seekTo(mStartPosition);
 
         mTimeVideo = mDuration;
@@ -443,7 +453,7 @@ public class K4LVideoTrimmer extends FrameLayout {
                 break;
             }
         }
-        setProgressBarPosition(mStartPosition);
+        // setProgressBarPosition(mStartPosition);
 
         setTimeFrames();
         mTimeVideo = mEndPosition - mStartPosition;
@@ -485,19 +495,19 @@ public class K4LVideoTrimmer extends FrameLayout {
             return;
         }
 
-        if (mHolderTopView != null) {
-            // use long to avoid overflow
-            setProgressBarPosition(time);
-        }
+//        if (mHolderTopView != null) {
+//            // use long to avoid overflow
+//            setProgressBarPosition(time);
+//        }
         setTimeVideo(time);
     }
 
-    private void setProgressBarPosition(int position) {
-        if (mDuration > 0) {
-            long pos = 1000L * position / mDuration;
-            mHolderTopView.setProgress((int) pos);
-        }
-    }
+//    private void setProgressBarPosition(int position) {
+//        if (mDuration > 0) {
+//            long pos = 1000L * position / mDuration;
+//            mHolderTopView.setProgress((int) pos);
+//        }
+//    }
 
     /**
      * Set video information visibility.

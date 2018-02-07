@@ -11,7 +11,7 @@ import com.example.gufran.k4lvideotrimgufransample.videotrimmer.interfaces.OnK4L
 import com.example.gufran.k4lvideotrimgufransample.videotrimmer.interfaces.OnTrimVideoListener;
 import com.example.gufran.k4lvideotrimgufransample.videotrimmer.view.K4LVideoTrimmer;
 
-public class TrimmerActivity extends AppCompatActivity implements OnTrimVideoListener, OnK4LVideoListener {
+public class VideoTrimmerActivity extends AppCompatActivity implements OnTrimVideoListener, OnK4LVideoListener {
 
     private K4LVideoTrimmer mVideoTrimmer;
     private ProgressDialog mProgressDialog;
@@ -56,7 +56,7 @@ public class TrimmerActivity extends AppCompatActivity implements OnTrimVideoLis
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(TrimmerActivity.this, getString(R.string.video_saved_at, uri.getPath()), Toast.LENGTH_SHORT).show();
+                Toast.makeText(VideoTrimmerActivity.this, getString(R.string.video_saved_at, uri.getPath()), Toast.LENGTH_SHORT).show();
             }
         });
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
@@ -79,7 +79,7 @@ public class TrimmerActivity extends AppCompatActivity implements OnTrimVideoLis
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(TrimmerActivity.this, message, Toast.LENGTH_SHORT).show();
+                Toast.makeText(VideoTrimmerActivity.this, message, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -89,7 +89,7 @@ public class TrimmerActivity extends AppCompatActivity implements OnTrimVideoLis
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(TrimmerActivity.this, "onVideoPrepared", Toast.LENGTH_SHORT).show();
+                Toast.makeText(VideoTrimmerActivity.this, "onVideoPrepared", Toast.LENGTH_SHORT).show();
             }
         });
     }
