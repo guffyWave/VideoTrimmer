@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.gufran.k4lvideotrimgufransample.videotrimmer.interfaces.OnK4LVideoListener;
@@ -15,11 +18,14 @@ public class VideoTrimmerActivity extends AppCompatActivity implements OnTrimVid
 
     private K4LVideoTrimmer mVideoTrimmer;
     private ProgressDialog mProgressDialog;
+    private ImageView doneIV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trimmer);
+
+        doneIV = (ImageView) findViewById(R.id.doneIV);
 
         Intent extraIntent = getIntent();
         String path = "";
@@ -40,8 +46,15 @@ public class VideoTrimmerActivity extends AppCompatActivity implements OnTrimVid
             mVideoTrimmer.setOnK4LVideoListener(this);
             //mVideoTrimmer.setDestinationPath("/storage/emulated/0/DCIM/CameraCustom/");
             mVideoTrimmer.setVideoURI(Uri.parse(path));
-            // mVideoTrimmer.setVideoInformationVisibility(true);
+             mVideoTrimmer.setVideoInformationVisibility(true);
         }
+
+        doneIV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mVideoTrimmer.onSaveClicked();
+            }
+        });
     }
 
     @Override
@@ -57,6 +70,7 @@ public class VideoTrimmerActivity extends AppCompatActivity implements OnTrimVid
             @Override
             public void run() {
                 Toast.makeText(VideoTrimmerActivity.this, getString(R.string.video_saved_at, uri.getPath()), Toast.LENGTH_SHORT).show();
+                Log.d("GUFRAN", "Result Video path " + getString(R.string.video_saved_at, uri.getPath()));
             }
         });
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
